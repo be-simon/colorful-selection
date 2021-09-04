@@ -1,0 +1,7 @@
+:root {
+  --selected-color: #000000;
+}
+
+::selection {
+  background-color: var(--selected-color);
+}

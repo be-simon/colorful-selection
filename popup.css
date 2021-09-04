@@ -1,0 +1,18 @@
+.color_container {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.color_div {
+  width: 20px;
+  height: 20px;
+  margin: 0 3px;
+  background-color:wheat ;
+  border-radius: 50%;
+}
+
+.color_div:hover{
+  cursor: pointer;
+}

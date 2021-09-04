@@ -1,0 +1,21 @@
+{
+  "name": "colorful-selection",
+  "description": "you can colorful marking on page directly",
+  "version": "1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*/*", "http://*/*"],
+      "css": ["main.css"],
+      "js": ["main.js"],
+      "run_at": "document_end"
+    }
+  ],
+  "permissions": ["storage", "tabs"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
