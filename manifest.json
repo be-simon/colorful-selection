@@ -9,7 +9,6 @@
   "content_scripts": [
     {
       "matches": ["https://*/*", "http://*/*"],
-      "css": ["main.css"],
       "js": ["main.js"],
       "run_at": "document_end"
     }
