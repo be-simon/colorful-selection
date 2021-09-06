@@ -11,6 +11,8 @@ function setColorList(colors) {
     colorDiv.style.backgroundColor = colors[i]
     
     colorDiv.addEventListener("click", async () => {
+      await chrome.storage.sync.set({"selectedColor": colors[i]})
+      
       const req = {
         "message": "change_color",
         "color": colors[i]
