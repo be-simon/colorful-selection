@@ -9,6 +9,32 @@
 
 
 # 수정 내역
+### 2021.09.07
+> popup 창 레이아웃 수정
+* 약간의 디자인 수정, 선택된 색상은 다르게 표시되게 했다.
+  -> storage에 저장된 selected 색상을 찾아 `css class를 추가`
+
+> chrome.storage.sync.get 비동기 처리
+* storage.sync.get은 비동기로 데이터를 가져오기 때문에 처리를 해줄 필요가 있다.
+  ```javascript
+    // storage.js
+    function storageGetSelected () {
+    return new Promise ((resolve, reject) => {
+      chrome.storage.sync.get("selectedColor", ({selectedColor}) => {
+        const err = chrome.runtime.lastError
+        if (err) return reject(err)
+
+        resolve(selectedColor)
+      })
+    })
+  }
+  ```
+  * storage.js에 storage에서 데이터를 받아오는 Promise를 만들었다.
+
+> 전역변수 삭제
+* 전역변수를 없애야겠다는 생각이 들어서 js 파일들에 즉시실행함수를 만들고 실행하는 형태로 수정해주었다.
+
+
 ### 2021.09.06 
 > injected style 우선 적용하기
 * manifest.json 파일에 정적으로 추가해준 css style은 DOM style 에 의해 덮어진다.

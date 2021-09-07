@@ -13,6 +13,12 @@
       "run_at": "document_end"
     }
   ],
+  "web_accessible_resources": [
+    {
+      "resources": [ "storage.js" ],
+      "matches": [ "http://*/*", "https://*/*" ]
+    }
+  ],
   "permissions": ["storage"],
   "action": {
     "default_popup": "popup.html"

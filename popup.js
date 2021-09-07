@@ -1,26 +1,47 @@
-chrome.storage.sync.get("colorSet", ({colorSet}) => {
-  setColorList(colorSet)
-})
+import {storageGetSelected, storageGetColorSet} from './storage.js'
 
-function setColorList(colors) {
-  const colorContainer = document.getElementsByClassName("color_container")[0]
-  for (let i = 0; i < colors.length; i++) {
-    const colorDiv = document.createElement('div')
+(async function () {
+  let selectedElement = null
+  const colorSet = await storageGetColorSet()
+  setColorList(colorSet)
+
+  async function setColorList(colors) {
+    const colorContainer = document.getElementsByClassName("color_container")[0]
     
-    colorDiv.classList.add('color_div')
-    colorDiv.style.backgroundColor = colors[i]
+    let selected = await storageGetSelected()
     
-    colorDiv.addEventListener("click", async () => {
-      await chrome.storage.sync.set({"selectedColor": colors[i]})
+    for (const c of colors) {
+      const colorDiv = document.createElement('div')
+      colorDiv.classList.add('color_div')
       
-      const req = {
-        "message": "change_color",
-        "color": colors[i]
+      const colorBtn = document.createElement('button')
+      colorBtn.classList.add('color_btn')
+      colorBtn.style.backgroundColor = c
+      
+      if (selected == c) {
+        colorBtn.classList.add('selected')
+        selectedElement = colorBtn
       }
-      const [tab] = await chrome.tabs.query({active: true, currentWindow: true})
-      chrome.tabs.sendMessage(tab.id, req)
-    })
+      
+      colorBtn.addEventListener("click", (e) => selectColorEvent(e.target, c))
+      
+      colorDiv.appendChild(colorBtn)
+      colorContainer.appendChild(colorDiv)
+    }
+  }
+  
+  async function selectColorEvent(target, color) {
+    selectedElement && selectedElement.classList.remove('selected')
+    selectedElement = target
+    selectedElement.classList.add('selected')
     
-    colorContainer.appendChild(colorDiv)
-  } 
-}
+    chrome.storage.sync.set({"selectedColor": color})
+    const req = {
+      "message": "change_color",
+      "color": color
+    }
+    const [tab] = await chrome.tabs.query({active: true, currentWindow: true})
+    chrome.tabs.sendMessage(tab.id, req)
+  }
+  
+})()

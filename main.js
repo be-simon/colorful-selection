@@ -1,5 +1,17 @@
-let currentBackgroundColor = '#000000'
-let currentColor = '#ffffff'
+(async function (){
+  const src = chrome.runtime.getURL('storage.js'); 
+  const {storageGetSelected} = await import(src);
+
+  const currentColor = '#ffffff'
+  const currentBackgroundColor = await storageGetSelected()
+  
+  setSelectionBackground(currentBackgroundColor, currentColor)  
+  chrome.runtime.onMessage.addListener(req => {
+    if (req.message === 'change_color')
+      setSelectionBackground(req.color, currentColor)
+  })
+})()
+  
 
 function setSelectionBackground(backgroundColor, color) {
   let styleSheet, styleElement
@@ -21,15 +33,3 @@ function setSelectionBackground(backgroundColor, color) {
     document.head.appendChild(styleElement)
   }
 }
-
-chrome.storage.sync.get("selectedColor", ({selectedColor}) => {
-  currentBackgroundColor = selectedColor
-  setSelectionBackground(currentBackgroundColor, currentColor)
-})
-
-chrome.runtime.onMessage.addListener(req => {
-  if (req.message === 'change_color') {
-    currentBackgroundColor = req.color
-    setSelectionBackground(currentBackgroundColor, currentColor)
-  }
-})

@@ -6,13 +6,29 @@
 }
 
 .color_div {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   margin: 0 3px;
-  background-color:wheat ;
-  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.color_div:hover{
+.color_btn {
+  width: 80%;
+  height: 80%;
+  border: 0.5px solid black;
+  border-radius: 50%;
+  background-color: cornflowerblue;
+}
+
+
+.color_btn:hover{
   cursor: pointer;
+  width: 85%;
+  height: 85%;
+}
+
+.color_btn.selected {
+  border: 2px solid #ff3333;
 }
