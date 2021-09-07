@@ -1,6 +1,6 @@
 {
   "name": "colorful-selection",
-  "description": "you can colorful marking on page directly",
+  "description": "Make colorful selection",
   "version": "1.0",
   "manifest_version": 3,
   "background": {
@@ -13,7 +13,7 @@
       "run_at": "document_end"
     }
   ],
-  "permissions": ["storage", "tabs"],
+  "permissions": ["storage"],
   "action": {
     "default_popup": "popup.html"
   }
