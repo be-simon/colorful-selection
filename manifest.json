@@ -4,7 +4,8 @@
   "version": "1.0",
   "manifest_version": 3,
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "content_scripts": [
     {
@@ -15,12 +16,21 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": [ "storage.js" ],
+      "resources": [ "storage.js"],
       "matches": [ "http://*/*", "https://*/*" ]
     }
   ],
-  "permissions": ["storage"],
+  "permissions": ["storage", "scripting", "activeTab"],
   "action": {
     "default_popup": "popup.html"
+  },
+  "commands": {
+    "marking-selection" : {
+      "suggested_key" : {
+        "windows": "Ctrl+Shift+S",
+        "mac": "Command+Shift+S"
+      },
+      "description": "Press Command+Shift+S"
+    }
   }
 }
