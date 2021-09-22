@@ -1,4 +1,8 @@
-function markSelection () {
+async function markSelection (bgColor, color) {
+  const style = chrome.runtime.getURL('style.js')
+  const {insertColorRule} = await import(style)
+
+  const className = `marking_${bgColor.slice(1)}`
   const selection = window.getSelection()
   const range = selection.rangeCount ? selection.getRangeAt(0) : null
   
@@ -7,7 +11,7 @@ function markSelection () {
 
   if (sc === ec) {
     const newNode = document.createElement('span')
-    newNode.classList.add('marking')
+    newNode.classList.add(className)
     range.surroundContents(newNode)
   } else {
     console.log(range.cloneContents())
@@ -18,7 +22,7 @@ function markSelection () {
         })
       } else {
         const newNode = document.createElement('span')
-        newNode.classList.add('marking')
+        newNode.classList.add(className)
         newNode.appendChild(parent.cloneNode())
         parent.parentNode.replaceChild(newNode, parent)
       }
@@ -28,30 +32,10 @@ function markSelection () {
     range.insertNode(rangeNode)
   }
 
-  let styleSheet, styleElement
-  const styleSheetList = document.styleSheets
-
-  if (styleSheetList.length) {
-    styleSheet = styleSheetList[styleSheetList.length-1]
-  } else {
-    styleElement = document.createElement('style')
-    styleSheet = styleElement.sheet  
-  }
-
-  const backgroundColor = '#000000'
-  const color = '#ffffff'
-  const selector = '.marking'
-  const cssText = `{background: ${backgroundColor}; color:${color}}`
-  styleSheet.insertRule(selector + cssText, styleSheet.cssRules.length)
-
-  if (!document.styleSheets.length) {
-    styleElement.sheet = styleSheet
-    document.head.appendChild(styleElement)
-  }
+  insertColorRule('.'+className, bgColor, color)
 
   selection.removeAllRanges()
   selection.empty()
-
 }
 
 

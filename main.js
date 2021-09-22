@@ -1,35 +1,16 @@
 (async function (){
-  const src = chrome.runtime.getURL('storage.js'); 
-  const {storageGetSelected} = await import(src);
-
-  const currentColor = '#ffffff'
-  const currentBackgroundColor = await storageGetSelected()
+  const storage = chrome.runtime.getURL('storage.js'); 
+  const style = chrome.runtime.getURL('style.js'); 
+  const {storageGetSelected} = await import(storage);
+  const {insertColorRule} = await import(style);
   
-  setSelectionBackground(currentBackgroundColor, currentColor)  
+  const selector = '::selection'
+  const curColor = '#ffffff'
+  const curbgColor = await storageGetSelected()
+  
+  insertColorRule(selector, curbgColor, curColor)
   chrome.runtime.onMessage.addListener(req => {
     if (req.message === 'change_color')
-      setSelectionBackground(req.color, currentColor)
+      insertColorRule(selector, req.color, curColor)
   })
 })()
-  
-
-function setSelectionBackground(backgroundColor, color) {
-  let styleSheet, styleElement
-  const styleSheetList = document.styleSheets
-
-  if (styleSheetList.length) {
-    styleSheet = styleSheetList[styleSheetList.length-1]
-  } else {
-    styleElement = document.createElement('style')
-    styleSheet = styleElement.sheet  
-  }
-
-  const selector = '::selection'
-  const cssText = `{background: ${backgroundColor}; color:${color}}`
-  styleSheet.insertRule(selector + cssText, styleSheet.cssRules.length)
-
-  if (!document.styleSheets.length) {
-    styleElement.sheet = styleSheet
-    document.head.appendChild(styleElement)
-  }
-}

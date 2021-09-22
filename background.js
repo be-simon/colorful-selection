@@ -12,9 +12,16 @@ chrome.commands.onCommand.addListener(async (c) => {
   if (c === 'marking-selection') {
     const [tab] = await chrome.tabs.query({active: true, currentWindow: true})
     
-    chrome.scripting.executeScript({
-      target: {tabId: tab.id},
-      func: markSelection
-    })
+    let bgColor = '#000000'
+    let color = '#ffffff'
+    chrome.storage.sync.get("selectedColor", (({selectedColor}) => {
+      bgColor = selectedColor
+      
+      chrome.scripting.executeScript({
+        target: {tabId: tab.id},
+        func: markSelection,
+        args:[bgColor, color]
+      })
+    }))
   }
 })
